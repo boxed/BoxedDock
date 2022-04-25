@@ -11,6 +11,8 @@
 		AEA36AE5280F9656002E65A7 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEA36AE4280F9656002E65A7 /* ContentView.swift */; };
 		AEA36AE7280F9657002E65A7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AEA36AE6280F9657002E65A7 /* Assets.xcassets */; };
 		AEA36AEA280F9657002E65A7 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AEA36AE9280F9657002E65A7 /* Preview Assets.xcassets */; };
+		AEA36AF2280F96BE002E65A7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEA36AF1280F96BE002E65A7 /* AppDelegate.swift */; };
+		AEA36AF828157BF7002E65A7 /* Hotkey.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEA36AF728157BF7002E65A7 /* Hotkey.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +22,8 @@
 		AEA36AE6280F9657002E65A7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AEA36AE9280F9657002E65A7 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		AEA36AEB280F9657002E65A7 /* BoxedDock.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BoxedDock.entitlements; sourceTree = "<group>"; };
+		AEA36AF1280F96BE002E65A7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		AEA36AF728157BF7002E65A7 /* Hotkey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hotkey.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +61,8 @@
 				AEA36AE6280F9657002E65A7 /* Assets.xcassets */,
 				AEA36AEB280F9657002E65A7 /* BoxedDock.entitlements */,
 				AEA36AE8280F9657002E65A7 /* Preview Content */,
+				AEA36AF1280F96BE002E65A7 /* AppDelegate.swift */,
+				AEA36AF728157BF7002E65A7 /* Hotkey.swift */,
 			);
 			path = BoxedDock;
 			sourceTree = "<group>";
@@ -139,8 +145,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AEA36AF2280F96BE002E65A7 /* AppDelegate.swift in Sources */,
 				AEA36AE5280F9656002E65A7 /* ContentView.swift in Sources */,
 				AEA36AE3280F9656002E65A7 /* BoxedDockApp.swift in Sources */,
+				AEA36AF828157BF7002E65A7 /* Hotkey.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
