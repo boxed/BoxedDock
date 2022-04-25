@@ -46,7 +46,6 @@ func getRunningApplications() -> [NSRunningApplication] {
         }
 }
 
-
 // MARK: - View
 
 struct ContentView: View {
@@ -54,7 +53,13 @@ struct ContentView: View {
     @State var apps = getRunningApplications()
     
     @State var searchText = ""
-    
+
+    func activate(app: NSRunningApplication) {
+        app.activate(options: .activateAllWindows)
+        searchText = ""
+        overlayWindow!.orderOut(nil)
+    }
+
     var body: some View {
         VStack {
             TextField("", text: $searchText).opacity(0).onSubmit {
@@ -63,16 +68,24 @@ struct ContentView: View {
                     if let name = item.localizedName {
                         if name.lowercased().starts(with: searchText.lowercased()) {
 //                            NSWorkspace.shared.open(item.bundleURL!)
-                            item.activate(options: .activateAllWindows)
-                            searchText = ""
-                            overlayWindow!.orderOut(nil)
+                            activate(app: item)
                             break
                         }
                     }
                 }
             }
             .onChange(of: searchText) { _ in
-                
+                var hits : [NSRunningApplication] = []
+                for item in self.apps {
+                    if let name = item.localizedName {
+                        if name.lowercased().starts(with: searchText.lowercased()) {
+                            hits.append(item)
+                        }
+                    }
+                }
+                if hits.count == 1 {
+                    activate(app: hits[0])
+                }
             }
             .frame(height: 1)
             
@@ -85,8 +98,7 @@ struct ContentView: View {
                     ForEach(apps, id: \.self) { item in
                         Button {
 //                            NSWorkspace.shared.open(item.bundleURL!)
-                            item.activate(options: .activateAllWindows)
-                            searchText = ""
+                            activate(app: item)
                         } label: {
                             VStack {
                                 SystemIcon(item)

@@ -15,7 +15,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         window = NSApplication.shared.windows.first
         
-        let level = 1000
+        let level = 100
         
         overlayWindow = NSWindow(
             contentRect: NSRect(x: 0, y: 0, width: NSScreen.main!.frame.width, height: NSScreen.main!.frame.height),
@@ -44,8 +44,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         window.standardWindowButton(.closeButton)?.isHidden = true
         window.standardWindowButton(.miniaturizeButton)?.isHidden = true
     
-        registerHotkey(keyCode: kVK_Tab, id: 0, modifierFlags: getCarbonFlagsFromCocoaFlags(cocoaFlags: .control))
+//        registerHotkey(keyCode: kVK_Tab, id: 0, modifierFlags: getCarbonFlagsFromCocoaFlags(cocoaFlags: .control))
 //        registerHotkey(keyCode: kVK_CapsLock, id: 0, modifierFlags: getCarbonFlagsFromCocoaFlags(cocoaFlags: .command))
+        registerHotkey(keyCode: kVK_F20, id: 0, modifierFlags: 0)
     }
 
     func applicationWillTerminate(_ aNotification: Notification) { }
