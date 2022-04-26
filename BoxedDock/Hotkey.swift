@@ -72,6 +72,7 @@ func registerHotkey(keyCode: Int, id: Int, modifierFlags: UInt32) {
       (nextHanlder, theEvent, userData) -> OSStatus in
         NSApp.activate(ignoringOtherApps: true)
         NSApplication.shared.windows.first!.makeKeyAndOrderFront(nil)
+        overlayWindow!.contentRect(forFrameRect: NSRect(x: 0, y: 0, width: NSScreen.main!.frame.width, height: NSScreen.main!.frame.height))
         overlayWindow!.orderFrontRegardless()
         
         NSLog("Hotkey hit!")
