@@ -22,21 +22,34 @@ let sortOrder = [
 
 let workspace = NSWorkspace.shared
 
+extension String {
+    func deletingPrefix(_ prefix: String) -> String {
+        guard self.hasPrefix(prefix) else { return self }
+        return String(self.dropFirst(prefix.count))
+    }
+}
+
+extension NSRunningApplication {
+    var fixedName : String {
+        return self.localizedName!.deletingPrefix("Microsoft ").deletingPrefix("Google ")
+    }
+}
+
 func getRunningApplications() -> [NSRunningApplication] {
     return workspace.runningApplications
         .filter {
             $0.activationPolicy == .regular
         }.sorted { a, b in
-            if sortOrder.contains(a.localizedName!) && !sortOrder.contains(b.localizedName!) {
+            if sortOrder.contains(a.fixedName) && !sortOrder.contains(b.fixedName) {
                 return true
             }
 
-            if sortOrder.contains(b.localizedName!) && !sortOrder.contains(a.localizedName!) {
+            if sortOrder.contains(b.fixedName) && !sortOrder.contains(a.fixedName) {
                 return false
             }
             
-            if sortOrder.contains(a.localizedName!) && sortOrder.contains(b.localizedName!) {
-                return sortOrder.firstIndex(of: a.localizedName!)! < sortOrder.firstIndex(of: b.localizedName!)!
+            if sortOrder.contains(a.fixedName) && sortOrder.contains(b.fixedName) {
+                return sortOrder.firstIndex(of: a.fixedName)! < sortOrder.firstIndex(of: b.fixedName)!
             }
 
             if let a = a.launchDate, let b = b.launchDate {
@@ -48,6 +61,8 @@ func getRunningApplications() -> [NSRunningApplication] {
 
 // MARK: - View
 
+var contentView: ContentView? = nil
+
 struct ContentView: View {
 
     @State var apps = getRunningApplications()
@@ -55,9 +70,10 @@ struct ContentView: View {
     @State var searchText = ""
 
     func activate(app: NSRunningApplication) {
+        assert(NSApp.windows.count == 1)
         app.activate(options: .activateAllWindows)
         searchText = ""
-        overlayWindow!.orderOut(nil)
+        window!.orderOut(nil)
     }
 
     var body: some View {
@@ -65,22 +81,18 @@ struct ContentView: View {
             TextField("", text: $searchText).opacity(0).onSubmit {
                 // on enter
                 for item in self.apps {
-                    if let name = item.localizedName {
-                        if name.lowercased().starts(with: searchText.lowercased()) {
+                    if item.fixedName.lowercased().starts(with: searchText.lowercased()) {
 //                            NSWorkspace.shared.open(item.bundleURL!)
-                            activate(app: item)
-                            break
-                        }
+                        activate(app: item)
+                        break
                     }
                 }
             }
             .onChange(of: searchText) { _ in
                 var hits : [NSRunningApplication] = []
                 for item in self.apps {
-                    if let name = item.localizedName {
-                        if name.lowercased().starts(with: searchText.lowercased()) {
-                            hits.append(item)
-                        }
+                    if item.fixedName.lowercased().starts(with: searchText.lowercased()) {
+                        hits.append(item)
                     }
                 }
                 if hits.count == 1 {
@@ -106,15 +118,16 @@ struct ContentView: View {
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
                                 
-                                Text(item.localizedName!.prefix(10).description).font(.system(size: 9))
+                                Text(item.fixedName.description).font(.system(size: 12)).lineLimit(1)
+                                Spacer()
                             }
                         }
                         .buttonStyle(PlainButtonStyle())
-                        .overlay(AcceptingFirstMouse(app: item))
-                        .opacity((item.localizedName?.lowercased().starts(with: searchText.lowercased()))! ? 1 : 0.1)
+                        //.overlay(AcceptingFirstMouse(app: item))
+                        .opacity((item.fixedName.lowercased().starts(with: searchText.lowercased())) ? 1 : 0.1)
                     }
                 }
-                .frame(height: 55)
+                .frame(height: 120)
                 .offset(y: -5)
 
 
@@ -135,21 +148,16 @@ struct ContentView: View {
 //                    }
 //                }
             }
+            Spacer()
         }
         .onAppear {
-            _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { _ in
-                apps = getRunningApplications()
-                let window : NSWindow = NSApplication.shared.windows.first!
-                var frame = window.frame
-                frame.size.width = CGFloat(apps.count) * 50
-                window.contentView?.setFrameSize(frame.size)
-                window.setFrame(frame, display: true, animate: false)
-            })
+            contentView = self
         }
         .onExitCommand(perform: {
-            // on ESC
+            assert(NSApp.windows.count == 1)
+            // on escape
             searchText = ""
-            overlayWindow!.orderOut(nil)
+            window!.orderOut(nil)
         })
     }
 }

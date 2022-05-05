@@ -9,6 +9,7 @@ import Foundation
 import Carbon
 import AppKit
 
+
 extension String {
   /// This converts string to UInt as a fourCharCode
   public var fourCharCodeValue: Int {
@@ -70,12 +71,19 @@ func registerHotkey(keyCode: Int, id: Int, modifierFlags: UInt32) {
     // Install handler.
     InstallEventHandler(GetApplicationEventTarget(), {
       (nextHanlder, theEvent, userData) -> OSStatus in
-        NSApp.activate(ignoringOtherApps: true)
-        NSApplication.shared.windows.first!.makeKeyAndOrderFront(nil)
-        overlayWindow!.contentRect(forFrameRect: NSRect(x: 0, y: 0, width: NSScreen.main!.frame.width, height: NSScreen.main!.frame.height))
-        overlayWindow!.orderFrontRegardless()
-        
+        assert(NSApp.windows.count == 1)
+        if window!.isVisible {
+            window!.orderOut(nil)
+        }
+        else {
+            contentView!.apps = getRunningApplications()
+            window!.setFrame(NSScreen.screens.first!.frame, display: true, animate: false)
+            NSApp.activate(ignoringOtherApps: true)
+            NSApp.windows.first!.makeKeyAndOrderFront(nil)
+            window!.orderFrontRegardless()
+        }
         NSLog("Hotkey hit!")
+        assert(NSApp.windows.count == 1)
 
       return noErr
     }, 1, &eventType, nil, nil)
