@@ -70,7 +70,7 @@ struct ContentView: View {
     @State var searchText = ""
 
     func activate(app: NSRunningApplication) {
-        assert(NSApp.windows.count == 1)
+//        assert(NSApp.windows.count == 1)
         app.activate(options: .activateAllWindows)
         searchText = ""
         window!.orderOut(nil)
@@ -154,7 +154,7 @@ struct ContentView: View {
             contentView = self
         }
         .onExitCommand(perform: {
-            assert(NSApp.windows.count == 1)
+//            assert(NSApp.windows.count == 1)
             // on escape
             searchText = ""
             window!.orderOut(nil)

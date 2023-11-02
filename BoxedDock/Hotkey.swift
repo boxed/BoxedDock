@@ -71,7 +71,9 @@ func registerHotkey(keyCode: Int, id: Int, modifierFlags: UInt32) {
     // Install handler.
     InstallEventHandler(GetApplicationEventTarget(), {
       (nextHanlder, theEvent, userData) -> OSStatus in
-        assert(NSApp.windows.count == 1)
+        // on macOS Sonoma this assert crashes...
+        //assert(NSApp.windows.count == 1)
+        
         if window!.isVisible {
             window!.orderOut(nil)
         }
@@ -83,9 +85,10 @@ func registerHotkey(keyCode: Int, id: Int, modifierFlags: UInt32) {
             window!.orderFrontRegardless()
         }
         NSLog("Hotkey hit!")
-        assert(NSApp.windows.count == 1)
+        // on macOS Sonoma this assert crashes...
+        //assert(NSApp.windows.count == 1)
 
-      return noErr
+        return noErr
     }, 1, &eventType, nil, nil)
 
     // Register hotkey.

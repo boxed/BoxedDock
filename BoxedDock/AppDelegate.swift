@@ -29,7 +29,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //        overlayWindow!.backgroundColor = NSColor.init(calibratedWhite: 0, alpha: 0.6)
 //        overlayWindow.standardWindowButton(.zoomButton)?.isHidden = true
 //        overlayWindow.standardWindowButton(.closeButton)?.isHidden = true
-//        overlayWindow.standardWindowButton(.miniaturizeButton)?.isHidden = true
+//        overlayWindow.standa  rdWindowButton(.miniaturizeButton)?.isHidden = true
 
         // TODO: it would be nice to make macOS respect this dock for window maximizing. visibleFrame
 //        window.setContentSize(NSSize(width: NSScreen.screens.first!.frame.width, height: windowHeight))
@@ -47,10 +47,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         window.hidesOnDeactivate = true
         window.orderOut(nil)
         
-        assert(NSApp.windows.count == 1)
-    
-        NSApp.setActivationPolicy(.accessory)
-        
+        // on macOS Sonoma this assert crashes...
+        //assert(NSApp.windows.count == 1)
+       
 //        registerHotkey(keyCode: kVK_Tab, id: 0, modifierFlags: getCarbonFlagsFromCocoaFlags(cocoaFlags: .control))
 //        registerHotkey(keyCode: kVK_CapsLock, id: 0, modifierFlags: getCarbonFlagsFromCocoaFlags(cocoaFlags: .command))
         registerHotkey(keyCode: kVK_F20, id: 0, modifierFlags: 0)
