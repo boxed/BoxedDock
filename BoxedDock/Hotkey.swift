@@ -81,7 +81,7 @@ func registerHotkey(keyCode: Int, id: Int, modifierFlags: UInt32) {
             contentView!.apps = getRunningApplications()
             window!.setFrame(NSScreen.screens.first!.frame, display: true, animate: false)
             NSApp.activate(ignoringOtherApps: true)
-            NSApp.windows.first!.makeKeyAndOrderFront(nil)
+            window!.makeKeyAndOrderFront(nil)
             window!.orderFrontRegardless()
         }
         NSLog("Hotkey hit!")

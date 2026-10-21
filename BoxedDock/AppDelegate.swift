@@ -9,11 +9,24 @@ var window: NSWindow!
 let windowHeight : CGFloat = 50
 let windowOriginY : CGFloat = 20
 
+// Borderless so it covers the menu bar and dock, but it still has to take keyboard input
+class DockWindow: NSWindow {
+    override var canBecomeKey: Bool { true }
+    override var canBecomeMain: Bool { true }
+}
+
 //@main
 class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        window = NSApplication.shared.windows.first
+        window = DockWindow(
+            contentRect: NSScreen.screens.first!.frame,
+            styleMask: [.borderless, .fullSizeContentView],
+            backing: .buffered,
+            defer: false
+        )
+        window.isReleasedWhenClosed = false
+        window.contentView = NSHostingView(rootView: ContentView().ignoresSafeArea())
         
         let level = 100
         
@@ -35,15 +48,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //        window.setContentSize(NSSize(width: NSScreen.screens.first!.frame.width, height: windowHeight))
 //        window.setFrameOrigin(NSPoint(x: 0, y: windowOriginY))
         window.hasShadow = false
-        window.backgroundColor = NSColor.init(calibratedWhite: 0, alpha: 0.8)
+        // The dimming layer is drawn by ContentView, newer macOS ignores the window background color
+        window.isOpaque = false
+        window.backgroundColor = .clear
+        window.appearance = NSAppearance(named: .darkAqua)
         window.setFrame(NSScreen.screens.first!.frame, display: true, animate: false)
         window.level = NSWindow.Level(level)
         window.collectionBehavior = .canJoinAllSpaces
 
-        window.isMovableByWindowBackground  = true
-        window.standardWindowButton(.zoomButton)?.isHidden = true
-        window.standardWindowButton(.closeButton)?.isHidden = true
-        window.standardWindowButton(.miniaturizeButton)?.isHidden = true
+        window.isMovableByWindowBackground  = false
         window.hidesOnDeactivate = true
         window.orderOut(nil)
         

@@ -13,12 +13,10 @@ struct BoxedDockApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
     var body: some Scene {
-        WindowGroup {
-            ContentView()
-            .ignoresSafeArea()
-            .frame(minWidth: 640, minHeight: 50)
+        // The window is created by AppDelegate
+        Settings {
+            EmptyView()
         }
-        .windowStyle(.hiddenTitleBar)
     }
 }
 
